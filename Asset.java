@@ -46,15 +46,19 @@ public class Asset {
     }
 
     /**
-     * Calculates the Return on Investment (ROI) for the asset.
+     * Calculates the Return on Investment (ROI) based on the given values.
      *
+     * @param purchasePrice        The purchase price of one unit of the asset.
+     * @param quantity             The number of units owned.
+     * @param currentMarketPrice   The current market price of one unit.
      * @return The ROI percentage.
      */
-    public float calculateROI() {
+    public static float calculateROI(float purchasePrice, float quantity, float currentMarketPrice) {
         float initialInvestment = quantity * purchasePrice;
-        float currentValue = calculateCurrentValue();
+        float currentValue = quantity * currentMarketPrice;
         return ((currentValue - initialInvestment) / initialInvestment) * 100;
     }
+
 
     /**
      * Gets the unique ID of the asset.
@@ -82,7 +86,32 @@ public class Asset {
     public String getAssetType() {
         return assetType;
     }
+    /**
+     * Gets the purchase price of the asset.
+     *
+     * @return the purchase price per unit of the asset
+     */
+    public float getPurchasePrice() {
+        return purchasePrice;
+    }
 
+    /**
+     * Gets the quantity of the asset owned.
+     *
+     * @return the number of units owned of the asset
+     */
+    public float getQuantity() {
+        return quantity;
+    }
+
+    /**
+     * Gets the current market price of the asset.
+     *
+     * @return the current market price per unit of the asset
+     */
+    public float getCurrentMarketPrice() {
+        return currentMarketPrice;
+    }
     /**
      * Returns a string representation of the asset.
      *
@@ -93,3 +122,4 @@ public class Asset {
         return assetName + " | Type: " + assetType + " | Quantity: " + quantity;
     }
 }
+
