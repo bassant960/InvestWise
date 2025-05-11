@@ -16,6 +16,7 @@ public class User {
      private String username;
      private String email;
      private String password;
+     private static User currentUser = null;
     /**
      * Constructs a new User with the given information.
      *
@@ -66,6 +67,7 @@ public class User {
          Writer writer = new FileWriter(file);
          gson.toJson(users, writer);
          writer.close();
+         currentUser = this;
          System.out.println("You registered successfully.");
          return true;
      }
@@ -88,6 +90,7 @@ public class User {
          for(User user : users) {
              if(user.username.equals(us)){
                  if(user.password.equals(pass)) {
+                     currentUser = user;
                      System.out.println("Sign in successfully");
                      return true;
                  }else{
@@ -99,7 +102,9 @@ public class User {
          return false;
 
      }
-
+    public static User getCurrentUser() {
+         return currentUser;
+    }
 
  }
 /**
@@ -125,4 +130,5 @@ public class User {
     public static boolean isvalidemail(String email){
         return email.matches("^[A-Za-z0-9+_.-]+@[A-Za-z0-9.-]+$");
     }
+
  }
