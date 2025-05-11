@@ -56,12 +56,20 @@ public class PortfolioManager {
     }
 
     /**
-     * Removes an asset from the portfolio by its ID and saves the updated list to a file.
+     * Removes an asset from the portfolio based on the asset ID.
      *
-     * @param assetID The ID of the asset to remove.
+     * @param assetID the ID of the asset to remove
      */
     public void removeAsset(int assetID) {
-        boolean removed = assets.removeIf(asset -> asset.getAssetID() == assetID);
+        boolean removed = false;
+        for (Asset asset : assets) {
+            if (asset.getAssetID() == assetID) {
+                assets.remove(asset);  
+                removed = true;
+                break;  
+            }
+        }
+
         if (removed) {
             saveAssetsToFile();
             System.out.println("Asset with ID " + assetID + " removed.");
@@ -69,6 +77,7 @@ public class PortfolioManager {
             System.out.println("Asset not found.");
         }
     }
+
 
     /**
      * Calculates the total current value of all assets in the portfolio.
@@ -90,11 +99,13 @@ public class PortfolioManager {
     public void printPortfolioSummary() {
         System.out.println("Portfolio Summary:");
         for (Asset asset : assets) {
-            System.out.printf("%s | Current Value: %.2f | ROI: %.2f%%\n",
-                    asset, asset.calculateCurrentValue(), asset.calculateROI());
+            float currentValue = asset.calculateCurrentValue();
+            float roi = Asset.calculateROI(asset.getPurchasePrice(), asset.getQuantity(), asset.getCurrentMarketPrice());
+            System.out.printf("%s | Current Value: %.2f | ROI: %.2f%%\n", asset, currentValue, roi);
         }
         System.out.println("Total Portfolio Value: " + getTotalCurrentValue());
     }
+
 
     /**
      * Saves the current list of assets to a JSON file.
