@@ -1,10 +1,6 @@
 package org.example;
 
-import java.io.FileWriter;
-import java.io.IOException;
-import java.io.Writer;
 import java.util.Date;
-import java.util.Calendar;
 import java.util.Random;
 import com.google.gson.Gson;
 
@@ -46,45 +42,31 @@ class Card{
     }
 }
 
-class BankAccount{
-
-    OTP otp;
-    public BankAccount(){
-        this.otp = new OTP();
-    }
-    public void ConnectAccount(PortfolioManager manager, Card card, int code){
-        if(!otp.VerifyOTP(code)){
-            return;
-        }
-        manager.connectcard(card);
-        manager.saveCardsToFile();
-        System.out.println("Card connected to Bank");
-
-    }
-}
-
 class OTP{
     int otpcode;
-    Calendar calendar;
-    int expairyDate;
-    public OTP() {
+    Date expaityDate;
+    public void SendOTP() {
         Random random = new Random();
         this.otpcode = random.nextInt(100000);
-        this.expairyDate = 30;
-        calendar = Calendar.getInstance();
-        System.out.println("OTP code is " + this.otpcode);
     }
     public boolean VerifyOTP(int code){
-        calendar.add(Calendar.SECOND, expairyDate);
-        Calendar now = Calendar.getInstance();
-        if(!now.equals(calendar)){
-            System.out.println("Time expired\n");
-            return false;
-        }
-        if(code!=this.otpcode){
-            System.out.println("Wrong code\n");
-        }
-        return (code==this.otpcode);
+        return code==this.otpcode;
     }
 }
 
+class ConnectBankAccount{
+    Card card;
+    int code;
+    OTP otp;
+    public boolean CheckCard(Card card){
+        return card.IsFound(card);
+    }
+    public void Connect(int code, Card card){
+        if(otp.VerifyOTP(code)){
+            System.out.println("Card is connected");
+        }
+        else{
+            System.out.println("OTP is not connected");
+        }
+    }
+}
