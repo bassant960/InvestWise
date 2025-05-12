@@ -17,6 +17,8 @@ public class User {
     private String email;
     private String password;
     private static User currentUser = null;
+    private List<Card> cards;
+    private List<Asset> assets;
     /**
      * Constructs a new org.example.User with the given information.
      *
@@ -31,6 +33,14 @@ public class User {
         this.email = email;
         this.password = password;
     }
+    public List<Card> getcards(){
+        return cards;
+    }
+
+    public List<Asset> getassets(){
+        return assets;
+    }
+
     /**
      * Signs up the user by validating credentials and saving them to a JSON file.
      *
