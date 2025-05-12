@@ -10,6 +10,7 @@ import java.util.List;
 /**
  * Represents a user who can sign up and sign in to the system.
  * Handles serialization and deserialization of user data using JSON and Gson.
+ * This class manages user credentials, assets, and user authentication.
  */
 public class User {
     private String name;
@@ -17,10 +18,17 @@ public class User {
     private String email;
     private String password;
     private static User currentUser = null;
-    private List<Card> cards;
-    private List<Asset> assets;
+    private List<Asset> userAssets = new ArrayList<>();
+
+    public List<Asset> getUserAssets() {
+        return userAssets;
+    }
+
+    public void addAsset(Asset asset) {
+        userAssets.add(asset);
+    }
     /**
-     * Constructs a new org.example.User with the given information.
+     * Constructs a new User with the given information.
      *
      * @param name     The full name of the user.
      * @param username The unique username of the user.
@@ -33,14 +41,6 @@ public class User {
         this.email = email;
         this.password = password;
     }
-    public List<Card> getcards(){
-        return cards;
-    }
-
-    public List<Asset> getassets(){
-        return assets;
-    }
-
     /**
      * Signs up the user by validating credentials and saving them to a JSON file.
      *
@@ -68,7 +68,7 @@ public class User {
         }
         for(User user : users) {
             if(user.username.equals(this.username) || user.email.equals(this.email)){
-                System.out.println("org.example.User already exists try to sign in");
+                System.out.println("User already exists try to sign in");
                 return false;
             }
 
@@ -108,10 +108,15 @@ public class User {
                     return false;
                 }
             }
-        } System.out.println("org.example.User does not exist");
+        } System.out.println("User does not exist");
         return false;
 
     }
+    /**
+     * Gets the current signed-in user.
+     *
+     * @return The current user if signed in, or null if no user is signed in.
+     */
     public static User getCurrentUser() {
         return currentUser;
     }
@@ -119,6 +124,7 @@ public class User {
 }
 /**
  * Utility class for validating user credentials such as password and email.
+ * This class provides static methods for validating passwords and email formats.
  */
 class AuthenticationService{
     /**
