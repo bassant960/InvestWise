@@ -7,7 +7,7 @@ import java.io.IOException;
 import java.io.Writer;
 import java.util.ArrayList;
 import java.util.List;
-
+import java.util.Scanner;
 /**
  * Manages a collection of investment assets in a portfolio.
  * Provides functionality to add, remove, list, and calculate values for assets,
@@ -64,14 +64,18 @@ public class PortfolioManager {
         saveAssetsToFile();
         System.out.println("Asset added: " + asset.getAssetName());
     }
-
-
     /**
-     * Removes an asset from the portfolio based on the asset ID.
-     *
-     * @param assetID the ID of the asset to remove
+     * Removes an asset from the portfolio based on user input for the asset ID.
+     * Prompts the user to enter the ID, removes the asset if found, and updates the file.
+     * If the asset is not found, displays a message to the user.
      */
-    public void removeAsset(int assetID) {
+    public void removeAsset() {
+        displayAssetNamesAndIDs();
+        Scanner scanner = new Scanner(System.in);
+        System.out.print("Enter the ID of the asset to remove: ");
+        int assetID = scanner.nextInt();
+        scanner.nextLine();
+
         boolean removed = false;
         for (Asset asset : assets) {
             if (asset.getAssetID() == assetID) {
@@ -81,6 +85,7 @@ public class PortfolioManager {
             }
         }
 
+
         if (removed) {
             saveAssetsToFile();
             System.out.println("Asset with ID " + assetID + " removed.");
@@ -89,30 +94,60 @@ public class PortfolioManager {
         }
     }
     /**
-     * Edits an existing asset in the portfolio by updating its quantity,
-     * purchase date, and purchase price based on the asset name.
-     *
-     * @param assetName        The name of the asset to edit.
-     * @param newQuantity      The new quantity to set.
-     * @param newPurchaseDate  The new purchase date to set.
-     * @param newPurchasePrice The new purchase price to set.
+     * Displays each asset's name and ID in the format "Asset Name, Asset ID".
+     * Useful for identifying assets before performing actions like edit or delete.
      */
-    public void editAsset(String assetName, int newQuantity, String newPurchaseDate, float newPurchasePrice) {
+    public void displayAssetNamesAndIDs() {
+        System.out.println("Asset List:");
         for (Asset asset : assets) {
-            if (asset.getAssetName().equalsIgnoreCase(assetName)) {
-                asset.setQuantity(newQuantity);
-                asset.setPurchaseDate(newPurchaseDate);
-                asset.setPurchasePrice(newPurchasePrice);
+            System.out.println(asset.getAssetName() + ", " + asset.getAssetID());
+        }
+    }
+    /**
+     * Edits an existing asset in the portfolio by ID.
+     * Prompts the user to select the asset by ID, then enter new values for quantity, date, and price.
+     * Updates the selected asset and saves the updated list to the file.
+     */
+    public void editAssetByID() {
 
-                System.out.println("Asset updated: " + assetName);
-                saveAssetsToFile();
-                return;
+        displayAssetNamesAndIDs();
+
+        System.out.print("Enter the asset ID you want to edit: ");
+        int assetID = new Scanner(System.in).nextInt();
+
+        Asset selectedAsset = null;
+        for (Asset asset : assets) {
+            if (asset.getAssetID() == assetID) {
+                selectedAsset = asset;
+                break;
             }
         }
-        System.out.println("Asset not found: " + assetName);
+
+        if (selectedAsset != null) {
+
+            System.out.println("Selected Asset Details:");
+            System.out.println("Asset Name: " + selectedAsset.getAssetName());
+            System.out.println("Purchase Date: " + selectedAsset.getPurchaseDate());
+            System.out.println("Quantity: " + selectedAsset.getQuantity());
+            System.out.println("Purchase Price: " + selectedAsset.getPurchasePrice());
+
+            System.out.print("Enter new quantity: ");
+            int newQuantity = new Scanner(System.in).nextInt();
+            System.out.print("Enter new purchase date: ");
+            String newPurchaseDate = new Scanner(System.in).nextLine();
+            System.out.print("Enter new purchase price: ");
+            float newPurchasePrice = new Scanner(System.in).nextFloat();
+
+            selectedAsset.setQuantity(newQuantity);
+            selectedAsset.setPurchaseDate(newPurchaseDate);
+            selectedAsset.setPurchasePrice(newPurchasePrice);
+
+            System.out.println("Asset updated: " + selectedAsset.getAssetName());
+            saveAssetsToFile();
+        } else {
+            System.out.println("Asset with ID " + assetID + " not found.");
+        }
     }
-
-
 
     /**
      * Calculates the total current value of all assets in the portfolio.
@@ -143,10 +178,8 @@ public class PortfolioManager {
 
 
     /**
-     * Saves the current list of assets to a JSON file.
-     * Uses Gson to serialize the data.
-     *
-     * @throws IOException If an error occurs during file writing.
+     * Saves the current list of assets to a JSON file using Gson for serialization.
+     * The file is saved under the name specified by FILE_NAME.
      */
     private void saveAssetsToFile() {
         try (Writer writer = new FileWriter(FILE_NAME)) {
