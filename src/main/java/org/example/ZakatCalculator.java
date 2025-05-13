@@ -1,7 +1,5 @@
 package org.example;
 
-import java.util.Scanner;
-
 /**
  * Represents a Zakat calculator for assets.
  * Handles Zakat calculation based on asset value, duration, and gold price.
@@ -38,6 +36,7 @@ public class ZakatCalculator {
      * Calculates the Zakat for the asset.
      */
     public void Calulate() {
+
         if (Duration >= 1 && asset.calculateCurrentValue() >= Limit) {
             this.Zakat = asset.calculateCurrentValue() * 0.025;
         } else {

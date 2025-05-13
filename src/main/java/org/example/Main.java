@@ -17,7 +17,7 @@ public class Main {
             System.out.println("5. Edit Asset");
             System.out.println("6. Calculate Zakat");
             System.out.println("7. Connect Card");
-            System.out.println("8. Exit");
+            System.out.println("8. Log out");
             System.out.print("Choose an option: ");
             int choice = scanner.nextInt();
             scanner.nextLine();
@@ -93,6 +93,7 @@ public class Main {
                     break;
 
                 case 6:
+                    PortfolioManager.displayAssetNamesAndIDs();
                     System.out.println("Enter Asset Name:");
                     String assetname = scanner.nextLine();
                     boolean found = false;
@@ -107,17 +108,17 @@ public class Main {
                     }
                     if(!found) {
                         System.out.println("Asset not found.");
-                        return;
+                        break;
                     }
                     int duration = scanner.nextInt();
                     while(duration < 0){
-                        System.out.println("Please inter a positive number\n");
+                        System.out.println("Please Enter a positive number\n");
                         duration = scanner.nextInt();
                     }
                     ZakatCalculator zakat = new ZakatCalculator(A, duration);
                     zakat.Calulate();
                     System.out.println(zakat.getZakat());
-                    return;
+                    break;
                 case 7:
                     System.out.println("Enter CNN:");
                     int cardCVV = scanner.nextInt();
@@ -150,7 +151,7 @@ public class Main {
                     account.ConnectAccount(manager, card, code);
 
                 case 8:
-                    System.out.println("Exiting...");
+                    System.out.println("Logging out................");
                     return;
 
                 default:
@@ -183,9 +184,19 @@ public class Main {
             username = input.next();
             System.out.print("Enter your Password: ");
             pass = input.next();
+            if(!AuthenticationService.isValidPass(pass)){
+                System.out.println("Password must have uppercase, lowercase and special characters");
+                return ;
+            }
+
             System.out.print("Enter your Email: ");
             email = input.next();
-            User user = new User(name, username, pass, email);
+
+            if(!AuthenticationService.isvalidemail(email)){
+                System.out.println("Email must have @ domain");
+                return ;
+            }
+            User user = new User(name, username, email, pass);
             boolean success = user.signup();
             if (success) {
                 opensecondmenu();

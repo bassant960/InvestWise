@@ -56,14 +56,14 @@ public class User {
      */
     public boolean signup() throws IOException {
 
-        if(!AuthenticationService.isvalidpass(password)){
-            System.out.println("Password must have uppercase, lowercase and special characters");
-            return false;
-        }
-        if(!AuthenticationService.isvalidemail(email)){
-            System.out.println("Email must have @ domain");
-            return false;
-        }
+//        if(!AuthenticationService.isvalidpass(password)){
+//            System.out.println("Password must have uppercase, lowercase and special characters");
+//            return false;
+//        }
+//        if(!AuthenticationService.isvalidemail(email)){
+//            System.out.println("Email must have @ domain");
+//            return false;
+//        }
         Gson gson = new GsonBuilder().setPrettyPrinting().create();
         File file = new File("Users.json");
         List<User> users = new ArrayList<User>();
@@ -141,9 +141,10 @@ class AuthenticationService{
      * @param pass The password to validate.
      * @return true if the password is valid, false otherwise.
      */
-    public static boolean isvalidpass(String pass){
-        return pass.matches("^(?=.[A-Z])(?=.[!@#$%^&*(),.?\":{}|<>]).+$");
+    public static boolean isValidPass(String pass) {
+        return pass.matches("^(?=.*[A-Z])(?=.*[a-z])(?=.*[!@#$%^&*(),.?\":{}|<>]).+$");
     }
+
     /**
      * Validates the email format.
      *

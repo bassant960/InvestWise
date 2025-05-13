@@ -19,7 +19,7 @@ import java.util.Scanner;
 public class PortfolioManager {
     private static final String FILE_NAME = "assets.json";
     private int managerID;
-    private List<Asset> assets;
+    private static List<Asset> assets;
     private List<Card> cards;
 
     /**
@@ -119,7 +119,7 @@ public class PortfolioManager {
      * Displays each asset's name and ID in the format "Asset Name, Asset ID".
      * Useful for identifying assets before performing actions like edit or delete.
      */
-    public void displayAssetNamesAndIDs() {
+    public static void displayAssetNamesAndIDs() {
         System.out.println("Asset List:");
         for (Asset asset : assets) {
             System.out.println(asset.getAssetName() + ", " + asset.getAssetID());
