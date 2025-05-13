@@ -120,6 +120,12 @@ public class Asset {
     public float getPurchasePrice() {
         return purchasePrice;
     }
+    /**
+     * Gets the Date of the asset owned.
+     *
+     * @return the Date of units owned of the asset
+     */
+    public String getPurchaseDate() {return purchaseDate;}
 
     /**
      * Gets the quantity of the asset owned.
