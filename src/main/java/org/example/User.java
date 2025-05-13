@@ -19,13 +19,20 @@ public class User {
     private String password;
     private static User currentUser = null;
     private List<Asset> userAssets = new ArrayList<>();
+    private List<Card> userCards= new ArrayList<>();
 
     public List<Asset> getUserAssets() {
         return userAssets;
     }
+    public List<Card> getUserCards() {
+        return userCards;
+    }
 
     public void addAsset(Asset asset) {
         userAssets.add(asset);
+    }
+    public void addCard(Card card) {
+        userCards.add(card);
     }
     /**
      * Constructs a new User with the given information.
