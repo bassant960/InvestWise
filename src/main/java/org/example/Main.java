@@ -4,11 +4,10 @@ import java.util.List;
 import java.util.Scanner;
 import java.io.IOException;
 
-public class Menu {
+public class Main {
     public static void opensecondmenu() {
         PortfolioManager manager = new PortfolioManager(1);
         Scanner scanner = new Scanner(System.in);
-
         while (true) {
             System.out.println("\n--- Portfolio Manager ---");
             System.out.println("1. Add Asset");
@@ -16,7 +15,9 @@ public class Menu {
             System.out.println("3. View Assets");
             System.out.println("4. View Portfolio Summary");
             System.out.println("5. Edit Asset");
-            System.out.println("6. Exit");
+            System.out.println("6. Calculate Zakat");
+            System.out.println("7. Connect Card");
+            System.out.println("8. Exit");
             System.out.print("Choose an option: ");
             int choice = scanner.nextInt();
             scanner.nextLine();
@@ -66,13 +67,13 @@ public class Menu {
                     break;
 
                 case 3:
-                    List<String> assetNames = manager.getAssets();
+                    List<Asset> assetNames = manager.getAssets();
                     if (assetNames.isEmpty()) {
                         System.out.println("No assets available.");
                     } else {
                         System.out.println("Assets:");
-                        for (String assetNameStr : assetNames) {
-                            System.out.println("- " + assetNameStr);
+                        for (Asset assetNameStr : assetNames) {
+                            System.out.println("- " + assetNameStr.getAssetName());
                         }
                     }
                     break;
@@ -86,12 +87,69 @@ public class Menu {
                     break;
 
                 case 5:
-                 System.out.println("Choose an asset to edit:");
+                    System.out.println("Choose an asset to edit:");
 
                     manager.editAssetByID();
                     break;
 
                 case 6:
+                    System.out.println("Enter Asset Name:");
+                    String assetname = scanner.nextLine();
+                    boolean found = false;
+                    Asset A = null;
+                    List<Asset> Assets = manager.getAssets();
+                    for(Asset asset: Assets) {
+                        if(asset.getAssetName().equals(assetname)) {
+                            A = asset;
+                            found = true;
+                            break;
+                        }
+                    }
+                    if(!found) {
+                        System.out.println("Asset not found.");
+                        return;
+                    }
+                    int duration = scanner.nextInt();
+                    while(duration < 0){
+                        System.out.println("Please inter a positive number\n");
+                        duration = scanner.nextInt();
+                    }
+                    ZakatCalculator zakat = new ZakatCalculator(A, duration);
+                    zakat.Calulate();
+                    System.out.println(zakat.getZakat());
+                    return;
+                case 7:
+                    System.out.println("Enter CNN:");
+                    int cardCVV = scanner.nextInt();
+                    scanner.nextLine();
+                    while(Integer.toString(cardCVV).length()!=3){
+                        System.out.println("CNN should be at 3 numbers:");
+                        cardCVV = scanner.nextInt();
+                        scanner.nextLine();
+                    }
+                    System.out.println("CNN should be 16 numbers:");
+                    String CardNumber = scanner.nextLine();
+                    //input.nextLine();
+                    while(CardNumber.length()!=16){
+                        System.out.println("CNN should be 16 numbers:");
+                        CardNumber = scanner.nextLine();
+                        scanner.nextLine();
+                    }
+                    System.out.println("Enter your Password:");
+                    int PIN = scanner.nextInt();
+                    scanner.nextLine();
+                    while(Integer.toString(PIN).length()!=4){
+                        System.out.println("password should be 4 numbers:");
+                        PIN = scanner.nextInt();
+                        scanner.nextLine();
+                    }
+                    BankAccount account = new BankAccount();
+                    System.out.print("Enter OTP Code: ");
+                    int code = scanner.nextInt();
+                    Card card = new Card(cardCVV, CardNumber, PIN);
+                    account.ConnectAccount(manager, card, code);
+
+                case 8:
                     System.out.println("Exiting...");
                     return;
 
