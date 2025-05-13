@@ -127,8 +127,31 @@ public class User {
     public static User getCurrentUser() {
         return currentUser;
     }
+    public static void updateUserInFile(User updatedUser) throws IOException {
+        Gson gson = new GsonBuilder().setPrettyPrinting().create();
+        File file = new File("Users.json");
+        List<User> users = new ArrayList<>();
 
-}
+        if (file.exists()) {
+            Reader reader = new FileReader(file);
+            users = gson.fromJson(reader, new TypeToken<List<User>>() {}.getType());
+            reader.close();
+        }
+        for (int i = 0; i < users.size(); i++) {
+            User user = users.get(i);
+            if (user != null && user.username != null && user.username.equals(updatedUser.username)) {
+                users.set(i, updatedUser);
+                break;
+            }
+        }
+        Writer writer = new FileWriter(file);
+        gson.toJson(users, writer);
+        writer.close();
+    }
+    }
+
+
+
 /**
  * Utility class for validating user credentials such as password and email.
  * This class provides static methods for validating passwords and email formats.

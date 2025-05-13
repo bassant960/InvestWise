@@ -1,5 +1,6 @@
 package org.example;
 
+import java.io.FileWriter;
 import java.util.List;
 import java.util.Scanner;
 import java.io.IOException;
@@ -211,6 +212,7 @@ public class Main {
     }
 
     public static void main(String[] args) {
+        //clearJsonFile();
         while (true) {
             try {
                 usermenu();
@@ -219,5 +221,13 @@ public class Main {
             }
         }
     }
+//    public static void clearJsonFile() {
+//        try (FileWriter writer = new FileWriter("Users.json")) {
+//            writer.write("[]");
+//            System.out.println("Users.json has been cleared.");
+//        } catch (IOException e) {
+//            System.out.println("Error clearing JSON file: " + e.getMessage());
+//        }
+//    }
 
 }

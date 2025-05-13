@@ -1,10 +1,19 @@
 [
   {
-    "name": "nesma",
-    "username": "non",
-    "email": "nesma@example.com",
-    "password": "Nesma@23",
-    "userAssets": [],
+    "name": "maya",
+    "username": "maya",
+    "email": "maya@ex.com",
+    "password": "Maya@23",
+    "userAssets": [
+      {
+        "assetID": 244,
+        "assetName": "firstone",
+        "assetType": "Stock",
+        "purchasePrice": 333333.0,
+        "quantity": 3.0,
+        "currentMarketPrice": 333333.0
+      }
+    ],
     "userCards": []
   }
 ]

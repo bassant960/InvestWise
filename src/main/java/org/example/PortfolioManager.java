@@ -8,6 +8,9 @@ import java.io.Writer;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
+
+//import static org.example.User.getCurrentUse();
+
 /**
  * Manages a collection of investment assets in a portfolio.
  * Provides functionality to add, remove, list, and calculate values for assets,
@@ -17,11 +20,11 @@ import java.util.Scanner;
  * @version 1.0
  */
 public class PortfolioManager {
-    private static final String FILE_NAME = "assets.json";
+    private static final String FILE_NAME = "Users.json";
     private int managerID;
     private static List<Asset> assets;
     private List<Card> cards;
-
+    User currentUser = User.getCurrentUser() ;
     /**
      * Constructs a PortfolioManager with a specified manager ID.
      *
@@ -29,7 +32,14 @@ public class PortfolioManager {
      */
     public PortfolioManager(int managerID) {
         this.managerID = managerID;
-        this.assets = new ArrayList<>();
+        if (assets != null){
+            this.assets = currentUser.getUserAssets();
+        this.cards = currentUser.getUserCards();
+        }else{
+            this.assets = new ArrayList<>();
+            this.cards = new ArrayList<>();
+        }
+
     }
 
     /**
@@ -50,20 +60,25 @@ public class PortfolioManager {
      *
      * @param asset The asset to add.
      */
-    public void addAsset(Asset asset) {
+    public void addAsset (Asset asset) {
         assets.add(asset);
 
         // Add to current user's personal asset list
         User currentUser = User.getCurrentUser();
         if (currentUser != null) {
             currentUser.addAsset(asset);
-            System.out.println("Asset added to current user's profile: " + asset.getAssetName());
+            try {
+                User.updateUserInFile(currentUser); // هنا التعديل المهم
+            } catch (IOException e) {
+                System.out.println("Error updating user with new asset: " + e.getMessage());
+            }
+            //saveAssetsToFile();
+            System.out.println("Asset added: " + asset.getAssetName());
+
         } else {
             System.out.println("No user is currently signed in.");
         }
 
-        saveAssetsToFile();
-        System.out.println("Asset added: " + asset.getAssetName());
     }
     /**
      * Adds an asset to the portfolio and saves the updated list to a file.
@@ -77,13 +92,18 @@ public class PortfolioManager {
         User currentUser = User.getCurrentUser();
         if (currentUser != null) {
             currentUser.addCard(card);
+            try {
+                User.updateUserInFile(currentUser);
+            } catch (IOException e) {
+                System.out.println("Error updating user with new card: " + e.getMessage());
+            }
+            //saveCardsToFile();
             System.out.println("Card is added to current user's profile");
         } else {
             System.out.println("No user is currently signed in.");
         }
 
-        saveCardsToFile();
-        System.out.println("Card is connected");
+
     }
 
     /**
@@ -109,8 +129,18 @@ public class PortfolioManager {
 
 
         if (removed) {
-            saveAssetsToFile();
+            User currentUser = User.getCurrentUser();
+            if (currentUser != null){
+                try {
+                    User.updateUserInFile(currentUser);
+                    System.out.println("Asset removed.");
+                } catch (IOException e) {
+                    System.out.println("Error updating user after removing asset: " + e.getMessage());
+                }
             System.out.println("Asset with ID " + assetID + " removed.");
+            }else{
+                System.out.println("No user is currently signed in.");
+            }
         } else {
             System.out.println("Asset not found.");
         }
@@ -131,6 +161,11 @@ public class PortfolioManager {
      * Updates the selected asset and saves the updated list to the file.
      */
     public void editAssetByID() {
+        User currentUser = User.getCurrentUser();
+        if (currentUser == null) {
+            System.out.println("No user is currently signed in.");
+            return;
+        }
 
         displayAssetNamesAndIDs();
 
@@ -163,9 +198,15 @@ public class PortfolioManager {
             selectedAsset.setQuantity(newQuantity);
             selectedAsset.setPurchaseDate(newPurchaseDate);
             selectedAsset.setPurchasePrice(newPurchasePrice);
+            try {
+                User.updateUserInFile(currentUser);
+                System.out.println("Asset updated.");
+            } catch (IOException e) {
+                System.out.println("Error updating user after editing asset: " + e.getMessage());
+            }
 
             System.out.println("Asset updated: " + selectedAsset.getAssetName());
-            saveAssetsToFile();
+
         } else {
             System.out.println("Asset with ID " + assetID + " not found.");
         }
