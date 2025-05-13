@@ -110,6 +110,7 @@ public class Main {
                         System.out.println("Asset not found.");
                         break;
                     }
+                    System.out.println("Enter Duration of Asset in years:");
                     int duration = scanner.nextInt();
                     while(duration < 0){
                         System.out.println("Please Enter a positive number\n");
