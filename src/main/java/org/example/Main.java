@@ -62,10 +62,7 @@ public class Menu {
                     break;
 
                 case 2:
-                    System.out.print("Enter the ID of the asset to remove: ");
-                    int removeID = scanner.nextInt();
-                    scanner.nextLine();
-                    manager.removeAsset(removeID);
+                    manager.removeAsset();
                     break;
 
                 case 3:
@@ -89,21 +86,9 @@ public class Menu {
                     break;
 
                 case 5:
-                    System.out.print("Enter the name of the asset to edit: ");
-                    String editName = scanner.nextLine();
+                 System.out.println("Choose an asset to edit:");
 
-                    System.out.print("Enter new quantity: ");
-                    int newQuantity = scanner.nextInt();
-                    scanner.nextLine();
-
-                    System.out.print("Enter new purchase date (e.g. 2025-05-12): ");
-                    String newPurchaseDate = scanner.nextLine();
-
-                    System.out.print("Enter new purchase price: ");
-                    float newPurchasePrice = scanner.nextFloat();
-                    scanner.nextLine();
-
-                    manager.editAsset(editName, newQuantity, newPurchaseDate, newPurchasePrice);
+                    manager.editAssetByID();
                     break;
 
                 case 6:
