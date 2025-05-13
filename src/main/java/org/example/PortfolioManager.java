@@ -20,6 +20,7 @@ public class PortfolioManager {
     private static final String FILE_NAME = "assets.json";
     private int managerID;
     private List<Asset> assets;
+    private List<Card> cards;
 
     /**
      * Constructs a PortfolioManager with a specified manager ID.
@@ -36,10 +37,10 @@ public class PortfolioManager {
      *
      * @return A list of asset names.
      */
-    public List<String> getAssets() {
-        List<String> assetNames = new ArrayList<>();
+    public List<Asset> getAssets() {
+        List<Asset> assetNames = new ArrayList<>();
         for (Asset asset : assets) {
-            assetNames.add(asset.getAssetName());
+            assetNames.add(asset);
         }
         return assetNames;
     }
@@ -64,6 +65,27 @@ public class PortfolioManager {
         saveAssetsToFile();
         System.out.println("Asset added: " + asset.getAssetName());
     }
+    /**
+     * Adds an asset to the portfolio and saves the updated list to a file.
+     *
+     * @param card The asset to add.
+     */
+    public void connectCard(Card card) {
+        cards.add(card);
+
+        // Add to current user's personal asset list
+        User currentUser = User.getCurrentUser();
+        if (currentUser != null) {
+            currentUser.addCard(card);
+            System.out.println("Card is added to current user's profile");
+        } else {
+            System.out.println("No user is currently signed in.");
+        }
+
+        saveCardsToFile();
+        System.out.println("Card is connected");
+    }
+
     /**
      * Removes an asset from the portfolio based on user input for the asset ID.
      * Prompts the user to enter the ID, removes the asset if found, and updates the file.
@@ -187,6 +209,15 @@ public class PortfolioManager {
             gson.toJson(assets, writer);
         } catch (IOException e) {
             System.out.println("Error saving assets to file: " + e.getMessage());
+        }
+    }
+
+    private void saveCardsToFile() {
+        try (Writer writer = new FileWriter(FILE_NAME)) {
+            Gson gson = new Gson();
+            gson.toJson(cards, writer);
+        } catch (IOException e) {
+            System.out.println("Error saving cards to file: " + e.getMessage());
         }
     }
 }
